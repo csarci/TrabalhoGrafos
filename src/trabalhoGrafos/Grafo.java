@@ -1,5 +1,3 @@
-package grafo;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -7,17 +5,36 @@ import java.util.Random;
 public class Grafo{
 
 	List<Vertice> vertices;
+	List<Vertice> articulacoes;
     List<Aresta> arestas;
+    List<Aresta> bloco;
+    List<Aresta> compConexa;
+    List<Aresta> pontes;
+    List<Aresta> caminhoEuleriano;
     boolean temCiclos;
 	boolean conexo;
 	boolean arvore;
+	boolean bipartido;
+	boolean euleriano;
+	public List<List<Aresta>> blocos;
+	public List<List<Aresta>> compConexas;
 
     public Grafo() {
-        vertices = new ArrayList<>();
-        arestas = new ArrayList<>();
+        this.vertices = new ArrayList<Vertice>();
+        this.articulacoes = new ArrayList<Vertice>();
+        this.arestas = new ArrayList<Aresta>();
+        this.pontes = new ArrayList<Aresta>();
+        this.bloco = new ArrayList<Aresta>();
+        this.compConexa = new ArrayList<Aresta>();
+        this.blocos = new ArrayList<List<Aresta>>();
+        this.compConexas = new ArrayList<List<Aresta>>();
+        this.caminhoEuleriano = new ArrayList<Aresta>();
+
         this.temCiclos = false;
         this.conexo = false;
         this.arvore = false;
+        this.bipartido = false;
+        this.euleriano = false;
     }
     
     public void geraGrafo(int numVertices, float prob) {
@@ -89,9 +106,10 @@ public class Grafo{
 
 	public void visitaAresta(Vertice v1, Vertice v2) {
 		for(int i=0; i < arestas.size(); i++){
-			if (arestas.get(i).v1 == v1){
-				if (arestas.get(i).v2 == v2){
+			if (arestas.get(i).getPrimVertice() == v1){
+				if (arestas.get(i).getSegVertice() == v2){
 					arestas.get(i).setVisitada();
+					System.out.println("Aresta " + v1 + "-" + v2 + " visitada.");
 				}
 			}
 		}
@@ -111,5 +129,26 @@ public class Grafo{
 
 	public void setArvore() {
 		this.arvore = true;
+	}
+
+	public void verificaBipartido() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setBipartido(boolean bipartido) {
+		this.bipartido = bipartido;
+	}
+
+	public List<Aresta> getBloco() {
+		return this.bloco;
+	}
+	
+	public void zeraBloco(){
+		this.bloco = new ArrayList<Aresta>();
+	}
+
+	public void setEuleriano(boolean euleriano) {
+		this.euleriano = euleriano;
 	}
 }
