@@ -1,64 +1,115 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package trabalhoGrafos;
+package grafo;
 
-import java.util.List;
 import java.util.ArrayList;
-/**
- *
- * @author tayanemoura e carlossarcinelli
- */
-public class Grafo {
+import java.util.List;
+import java.util.Random;
 
-    List<Vertice> vertices;
+public class Grafo{
+
+	List<Vertice> vertices;
     List<Aresta> arestas;
+    boolean temCiclos;
+	boolean conexo;
+	boolean arvore;
 
     public Grafo() {
         vertices = new ArrayList<>();
         arestas = new ArrayList<>();
+        this.temCiclos = false;
+        this.conexo = false;
+        this.arvore = false;
     }
+    
+    public void geraGrafo(int numVertices, float prob) {
+    	
+    	if (numVertices < 0) 
+        	throw new IllegalArgumentException("Número de vértices deve ser maior que 0");
+        if (prob < 0 || prob > 1)
+        	throw new IllegalArgumentException("A probabilidade de inclusão de arestas deve ser entre 0 e 1");
+        
+	    geraVertices(numVertices);
+	    geraArestas(prob);
+	}
 
-    private Vertice addVertice(String nome) {
-        Vertice v = new Vertice(nome);
-        vertices.add(v);
-        return v;
-    }
+    private void geraArestas(float prob) {
+    	
+    	Float numGerado;
+    	Random gerador = new Random();
+    	
+    	for(int i=0; i < vertices.size(); i++){
+    		for(int j=i+1; j < vertices.size(); j++){
+    			numGerado = gerador.nextFloat();
+    			if (numGerado <= prob){
+    				arestas.add(new Aresta(vertices.get(i),vertices.get(j)));
+    				vertices.get(i).vizinhos.add(vertices.get(j));
+    				vertices.get(j).vizinhos.add(vertices.get(i));
+    			}
+    		}
+    	}
+	}
 
-    private Aresta addAresta(Vertice v1, Vertice v2) {
-        Aresta e = new Aresta(v1, v2);
-        v1.addAdj(v2);
-        v2.addAdj(v1);
-        arestas.add(e);
-        return e;
-    }
-    //depois modificar para a geração de grafos que ele pediu (aleatório e com prob)
-    public Grafo geraGrafo (){
-        Grafo g = new Grafo();
-        Vertice s = g.addVertice("s");
-        Vertice t = g.addVertice("t");
-        Vertice y = g.addVertice("y");
-        Vertice z = g.addVertice("z");
-        Vertice w = g.addVertice("w");
-        Aresta st = g.addAresta(s, t);
-        Aresta sy = g.addAresta(s, y);
-        Aresta ty = g.addAresta(t, y);
-        Aresta zs = g.addAresta(z, s);
-        return g;
-    }
-    @Override
+	private void geraVertices(int numVertices) {
+		for (int i = 0; i < numVertices; i++){
+			vertices.add(new Vertice(i));
+		}
+	}
+
+	@Override
     public String toString() {
-        String r = "";
+        String toString = "";
         for (Vertice u : vertices) {
-            r += u.nome + " -- ";
-            for (Vertice v : u.adj) {
-                r += v.nome + ", ";
+            toString += u.indice + " -- ";
+            for (Vertice v : u.vizinhos) {
+                toString += v.indice + ", ";
             }
-            r += "\n";
+            toString += "\n";
         }
-        return r;
+        return toString;
     }
 
+	public void buscaCompConexas() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void buscaPontes() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void buscaArticulacoes() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void buscaBlocos() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void visitaAresta(Vertice v1, Vertice v2) {
+		for(int i=0; i < arestas.size(); i++){
+			if (arestas.get(i).v1 == v1){
+				if (arestas.get(i).v2 == v2){
+					arestas.get(i).setVisitada();
+				}
+			}
+		}
+	}
+
+	public void setCiclico() {
+		this.temCiclos = true;
+	}
+
+	public void setAciclico() {
+		this.temCiclos = false;
+	}
+
+	public void setConexo() {
+		this.conexo = true;
+	}
+
+	public void setArvore() {
+		this.arvore = true;
+	}
 }
