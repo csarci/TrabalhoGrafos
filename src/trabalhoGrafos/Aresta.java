@@ -1,9 +1,3 @@
-package grafo;
-
-/**
- *
- * @author tayanemoura e carlossarcinelli
- */
 class Aresta {
     Vertice v1;
     Vertice v2;
@@ -25,4 +19,13 @@ class Aresta {
 	public void desvisita() {
 		this.visitada = false;
 	}
+
+	public Vertice getPrimVertice() {
+		return this.v1;
+	}
+
+	public Vertice getSegVertice() {
+		return this.v2;
+	}
+
 }
