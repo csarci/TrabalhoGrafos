@@ -4,7 +4,7 @@ public class TestaGeraGrafo {
 
 		public static void main(String[] args) {
 			Grafo g = new Grafo();
-			g.geraGrafo(5, 0.8f);
+			g.geraGrafo(8, 0.8f);
 			System.out.println(g.toString());
 			Vertice raiz = g.vertices.get(0);
 			
@@ -33,8 +33,6 @@ public class TestaGeraGrafo {
 			System.out.println("Pontes: " + g.pontes.toString());
 			
 			dps.verificaEuleriano();
-			dps.algoritmoFleury();
-//			System.out.println("Caminho Euleriano: " + g.caminhoEuleriano.toString());
 
 //			for (int i = 0; i < g.vertices.size(); i++) {
 //				System.out.println(g.vertices.get(i).toString());
