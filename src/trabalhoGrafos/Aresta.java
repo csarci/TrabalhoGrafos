@@ -1,3 +1,5 @@
+package grafo;
+
 class Aresta {
     Vertice v1;
     Vertice v2;
@@ -28,4 +30,7 @@ class Aresta {
 		return this.v2;
 	}
 
+	public String toString(){
+		return String.valueOf(getPrimVertice().indice) + "-" + String.valueOf(getSegVertice().indice);
+	}
 }
