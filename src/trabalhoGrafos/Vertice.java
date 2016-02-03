@@ -1,5 +1,7 @@
-	import java.util.ArrayList;
-	import java.util.List;
+package grafo;
+
+import java.util.ArrayList;
+import java.util.List;
 
 	/**
 	 *
@@ -61,7 +63,20 @@
 		}
 	    
 		public String toString(){
-			return String.valueOf(this.indice);
+			String retorno = "";
+			retorno += "indice: " + String.valueOf(this.indice) + " cor: " + this.cor + " PE: " + this.PE + " PS: " + this.PS + 
+					" back: " + this.back;
+			
+			if (this.pai != null){
+				retorno += " pai: " + this.pai.getIndice();
+			}
+			
+			return retorno;
 		}
-	}
 
+		private int getIndice() {
+			return this.indice;
+		}
+		
+		
+	}
