@@ -232,6 +232,8 @@ public class BuscaProfundidade {
 		if (euleriano == true && grafo.conexo == true){
 			grafo.setEuleriano(euleriano);
 			System.out.println("O grafo é euleriano");
+			algoritmoFleury();
+			System.out.println("Caminho euleriano: " + grafo.caminhoEuleriano.toString());
 		}
 		else{
 			System.out.println("O grafo não é euleriano");
@@ -242,20 +244,19 @@ public class BuscaProfundidade {
 		Grafo novo = grafo;
 		Vertice v1 = novo.vertices.get(0);
 		
-		while (novo.arestas.size() > 0){
+		for (int i = 0; i < novo.arestas.size(); i++) {
 			if (v1.vizinhos.size() == 1){
 				grafo.caminhoEuleriano.add(new Aresta(v1, v1.vizinhos.get(0)));
 				v1 = v1.vizinhos.get(0);
 				novo.arestas.remove(0);
 			}
 			else{
-				for (int i = 0; i < novo.arestas.size(); i++) {
-					if (novo.arestas.get(i).getPrimVertice() == v1){
-						if (!grafo.pontes.contains(novo.arestas.get(i))){
-							grafo.caminhoEuleriano.add(novo.arestas.get(i));
-							v1 = novo.arestas.get(i).getSegVertice();
-							i = novo.arestas.size()-1;
-							novo.arestas.remove(i);
+				for (int j = 0; j < novo.arestas.size(); j++) {
+					if (novo.arestas.get(j).getPrimVertice() == v1){
+						if (!grafo.pontes.contains(novo.arestas.get(j))){
+							grafo.caminhoEuleriano.add(novo.arestas.get(j));
+							v1 = novo.arestas.get(j).getSegVertice();
+							j = novo.arestas.size();
 						}
 					}
 				}
