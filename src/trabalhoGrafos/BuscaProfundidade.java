@@ -1,3 +1,5 @@
+package grafo;
+
 import java.util.ArrayList;
 
 public class BuscaProfundidade {
@@ -26,21 +28,27 @@ public class BuscaProfundidade {
 	void realizaBusca(Vertice raiz) {
 		relogio++;
         raiz.setPE(relogio);
-        for (int i = 0; i < raiz.vizinhos.size(); i++) {
-            if (raiz.vizinhos.get(i).getPE() == 0){
-            	grafo.visitaAresta(raiz, raiz.vizinhos.get(i));
-            	grafo.compConexa.add(new Aresta(raiz, raiz.vizinhos.get(i)));
-                raiz.vizinhos.get(i).setPai(raiz);
-                realizaBusca(raiz.vizinhos.get(i));
-            }
-            else{
-                if ((raiz.vizinhos.get(i).getPS() == 0)
-                		&& (raiz.getPai() != raiz.vizinhos.get(i))){
-                			grafo.setCiclico();
-                			grafo.visitaAresta(raiz, raiz.vizinhos.get(i));
-                        	grafo.compConexa.add(new Aresta(raiz, raiz.vizinhos.get(i)));
-                		}
-            }
+        if (raiz.vizinhos.size() > 0){
+	        for (int i = 0; i < raiz.vizinhos.size(); i++) {
+	        	if (!grafo.compConexa.contains(raiz)){
+	        		grafo.compConexa.add(raiz);
+	        	}
+	        	if (raiz.vizinhos.get(i).getPE() == 0){
+	            	grafo.visitaAresta(raiz, raiz.vizinhos.get(i));
+	                raiz.vizinhos.get(i).setPai(raiz);
+	                realizaBusca(raiz.vizinhos.get(i));
+	            }
+	            else{
+	                if ((raiz.vizinhos.get(i).getPS() == 0)
+	                		&& (raiz.getPai() != raiz.vizinhos.get(i))){
+	                			grafo.setTemCiclos();
+	                			grafo.visitaAresta(raiz, raiz.vizinhos.get(i));
+	                		}
+	            }
+	        }
+        }
+        else{
+        	grafo.compConexa.add(raiz);
         }
         relogio++;
         raiz.setPS(relogio);
@@ -54,8 +62,10 @@ public class BuscaProfundidade {
 				  compConexas++;
 				  realizaBusca(grafo.vertices.get(i));
 			  }
-			  grafo.compConexas.add(grafo.compConexa);
-			  grafo.compConexa = new ArrayList<Aresta>();
+			  if(grafo.compConexa.size() > 0){
+				  grafo.compConexas.add(grafo.compConexa);
+				  grafo.compConexa = new ArrayList<Vertice>();
+			  }
 		  }
 		  
 		  if(compConexas == 1){
@@ -63,17 +73,23 @@ public class BuscaProfundidade {
 			  System.out.println("O grafo é conexo");
 		  }
 		  else{
-			  System.out.println("O grafo não é conexo e possui " + compConexas + " componentes conexas");
+			  System.out.println("O grafo não é conexo e possui " + compConexas + " componentes conexas que são: " + "\n" + grafo.compConexas.toString());
 		  }
 	}
 
 	public void verificaArvore() {
 		if ((grafo.conexo) && (!grafo.temCiclos)){
-			grafo.setArvore();
+			grafo.setArvore(true);
+			System.out.println("O grafo é uma árvore");
 		}
+		else{
+			grafo.setArvore(false);
+			System.out.println("O grafo não é uma árvore");
+		}
+		System.out.println("Tem ciclos? " + grafo.temCiclos);
 	}
 	
-	private void verificaBipartidariedade(Vertice raiz) {
+	public void verificaBipartidariedade(Vertice raiz) {
 		relogio++;
         raiz.setPE(relogio);
         for (int i = 0; i < raiz.vizinhos.size(); i++) {
@@ -101,7 +117,7 @@ public class BuscaProfundidade {
         raiz.setPS(relogio);
     }
 	
-	private void calculaBacks(Vertice raiz) {
+	public void calculaBacks(Vertice raiz) {
 		relogio++;
         raiz.setPE(relogio);
         raiz.setBack(raiz.getPE());
@@ -129,7 +145,7 @@ public class BuscaProfundidade {
     }
 	
 	
-	private void encontraArticulacoes() {
+	public void encontraArticulacoes() {
 		for (int i=0; i < grafo.vertices.size(); i++){
 			if (grafo.vertices.get(i).getPai() == null){
 				if  (contaFilhosRaiz(grafo.vertices.get(i)) > 1){
@@ -165,7 +181,7 @@ public class BuscaProfundidade {
 		return numFilhos;
 	}
 
-	private void encontraBlocos(Vertice raiz) {
+	public void encontraBlocos(Vertice raiz) {
 		relogio++;
         raiz.setPE(relogio);
         raiz.setBack(raiz.getPE());
@@ -175,7 +191,9 @@ public class BuscaProfundidade {
             	grafo.bloco.add(new Aresta(raiz, raiz.vizinhos.get(i)));
                 raiz.vizinhos.get(i).setPai(raiz);
                 encontraBlocos((raiz.vizinhos.get(i)));
-                grafo.blocos.add(grafo.getBloco());
+                if (grafo.bloco.size() > 0){
+                	grafo.blocos.add(grafo.getBloco());
+                }
                 grafo.zeraBloco();
                 if (raiz.vizinhos.get(i).getBack() >= raiz.getPE()){
                 	raiz.setBack(raiz.vizinhos.get(i).getBack());
@@ -196,7 +214,7 @@ public class BuscaProfundidade {
         raiz.setPS(relogio);
     }
 	
-	private void encontraPontes(){
+	public void encontraPontes(){
 		for (int i=0; i < grafo.blocos.size(); i++){
 			if (grafo.blocos.get(i).size() == 1){
 				grafo.pontes.add(grafo.blocos.get(i).get(0));
@@ -204,7 +222,7 @@ public class BuscaProfundidade {
 		}
 	}
 	
-	private void verificaEuleriano(){
+	public void verificaEuleriano(){
 		boolean euleriano = true;
 		for(int i=0; i < grafo.vertices.size(); i++){
 			if (grafo.vertices.get(i).vizinhos.size() %2 != 0){
@@ -213,10 +231,14 @@ public class BuscaProfundidade {
 		}
 		if (euleriano == true && grafo.conexo == true){
 			grafo.setEuleriano(euleriano);
+			System.out.println("O grafo é euleriano");
+		}
+		else{
+			System.out.println("O grafo não é euleriano");
 		}
 	}
 	
-	private void algoritmoFleury(){
+	public void algoritmoFleury(){
 		Grafo novo = grafo;
 		Vertice v1 = novo.vertices.get(0);
 		
@@ -228,11 +250,11 @@ public class BuscaProfundidade {
 			}
 			else{
 				for (int i = 0; i < novo.arestas.size(); i++) {
-					if (novo.arestas.get(i).v1 == v1){
+					if (novo.arestas.get(i).getPrimVertice() == v1){
 						if (!grafo.pontes.contains(novo.arestas.get(i))){
 							grafo.caminhoEuleriano.add(novo.arestas.get(i));
-							v1 = novo.arestas.get(i).v2;
-							i = novo.arestas.size();
+							v1 = novo.arestas.get(i).getSegVertice();
+							i = novo.arestas.size()-1;
 							novo.arestas.remove(i);
 						}
 					}
