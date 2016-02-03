@@ -1,3 +1,5 @@
+package grafo;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -8,7 +10,7 @@ public class Grafo{
 	List<Vertice> articulacoes;
     List<Aresta> arestas;
     List<Aresta> bloco;
-    List<Aresta> compConexa;
+    List<Vertice> compConexa;
     List<Aresta> pontes;
     List<Aresta> caminhoEuleriano;
     boolean temCiclos;
@@ -17,7 +19,7 @@ public class Grafo{
 	boolean bipartido;
 	boolean euleriano;
 	public List<List<Aresta>> blocos;
-	public List<List<Aresta>> compConexas;
+	public List<List<Vertice>> compConexas;
 
     public Grafo() {
         this.vertices = new ArrayList<Vertice>();
@@ -25,15 +27,15 @@ public class Grafo{
         this.arestas = new ArrayList<Aresta>();
         this.pontes = new ArrayList<Aresta>();
         this.bloco = new ArrayList<Aresta>();
-        this.compConexa = new ArrayList<Aresta>();
+        this.compConexa = new ArrayList<Vertice>();
         this.blocos = new ArrayList<List<Aresta>>();
-        this.compConexas = new ArrayList<List<Aresta>>();
+        this.compConexas = new ArrayList<List<Vertice>>();
         this.caminhoEuleriano = new ArrayList<Aresta>();
 
         this.temCiclos = false;
         this.conexo = false;
         this.arvore = false;
-        this.bipartido = false;
+        this.bipartido = true;
         this.euleriano = false;
     }
     
@@ -84,38 +86,18 @@ public class Grafo{
         return toString;
     }
 
-	public void buscaCompConexas() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void buscaPontes() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void buscaArticulacoes() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void buscaBlocos() {
-		// TODO Auto-generated method stub
-		
-	}
-
 	public void visitaAresta(Vertice v1, Vertice v2) {
 		for(int i=0; i < arestas.size(); i++){
 			if (arestas.get(i).getPrimVertice() == v1){
 				if (arestas.get(i).getSegVertice() == v2){
 					arestas.get(i).setVisitada();
-					System.out.println("Aresta " + v1 + "-" + v2 + " visitada.");
+					//System.out.println("Aresta " + v1 + "-" + v2 + " visitada.");
 				}
 			}
 		}
 	}
 
-	public void setCiclico() {
+	public void setTemCiclos() {
 		this.temCiclos = true;
 	}
 
@@ -127,13 +109,8 @@ public class Grafo{
 		this.conexo = true;
 	}
 
-	public void setArvore() {
-		this.arvore = true;
-	}
-
-	public void verificaBipartido() {
-		// TODO Auto-generated method stub
-		
+	public void setArvore(boolean b) {
+		this.arvore = b;
 	}
 
 	public void setBipartido(boolean bipartido) {
@@ -150,5 +127,9 @@ public class Grafo{
 
 	public void setEuleriano(boolean euleriano) {
 		this.euleriano = euleriano;
+	}
+
+	public boolean getArvore() {
+		return this.arvore;
 	}
 }
